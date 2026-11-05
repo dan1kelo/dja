@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title|default:"Jewpro" }}</title>
+    <link rel="stylesheet" href="{% static 'bibok/css/main.css' %}">
+</head>
+<body>
+<div class="game">
+    <div class="top">
+        <a href="{% url 'home' %}">← Назад</a>
+        <span>Побед: <b>{{ score }}</b></span>
+    </div>
+
+    {% if movie %}
+        <img id="poster" src="{{ movie.poster_url }}" alt="Постер" style="filter: blur({{ blur }}px)">
+
+        <div id="lives">{% for l in lives %}{% if l == 'x' %}🔴{% else %}⚪{% endif %} {% endfor %}</div>
+        <p id="hint">{{ hint }}</p>
+
+        {% if status %}
+            <p id="result">
+                {% if status == 'win' %}Верно!{% else %}Не угадал.{% endif %}
+                {{ movie.title }} ({{ movie.year }})
+            </p>
+            <form method="post" action="{% url 'next' %}">
+                {% csrf_token %}
+                <button class="btn">Следующий фильм</button>
+            </form>
+        {% else %}
+            <form method="post" action="{% url 'guess' %}">
+                {% csrf_token %}
+                <input id="input" name="title" list="movies" autocomplete="off" placeholder="Название фильма…" required autofocus>
+                <datalist id="movies">
+                    {% for m in movies %}<option value="{{ m.title }}">{% endfor %}
+                </datalist>
+                <button class="btn">Угадать</button>
+            </form>
+        {% endif %}
+
+        <ul id="history">
+            {% for h in history %}<li>❌ {{ h }}</li>{% endfor %}
+        </ul>
+        {% endif %}
+</div>
+</body>
+</html>

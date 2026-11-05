@@ -1,9 +1,43 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title|default:"Jewpro" }}</title>
+    <link rel="stylesheet" href="{% static 'bibok/css/main.css' %}">
+</head>
+<style>
+    body {
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .home {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+    }
+</style>
 <body>
-
-<h1>Hello World!</h1>
-<p>Welcome to my first Django project!</p>
-
+    <main class="home">
+        <h1>guess name film in my website</h1>
+        <p>With each mistake, the picture gets clearer. You have 6 tries.</p>
+        <a href="{% url 'game' %}" class="btn">start game</a>
+        <p>
+        {% if user.is_authenticated %}
+            Привет, <b>{{ user.username }}</b>!
+            <form method="post" action="{% url 'logout' %}" style="display:inline">
+                {% csrf_token %}
+                <button class="btn">Выйти</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}">Войти</a> · <a href="{% url 'register' %}">Регистрация</a>
+        {% endif %}
+        </p>
+    </main>
 </body>
 </html>

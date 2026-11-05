@@ -1,0 +1,65 @@
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    background: #f3f4f6 url("../../image/guess-movie-bg.svg") center / cover no-repeat fixed;
+    min-height: 100vh;
+    color: #111827;
+}
+
+.hidden { display: none; }
+
+a { color: inherit; }
+
+.btn {
+    display: block;
+    width: 100%;
+    border-radius: 6px;
+    background: #111827;
+    color: #fff;
+    font-size: 1rem;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.home {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 48px 16px;
+    text-align: center;
+}
+.home h1 { font-size: 1.9rem; }
+.home .btn { display: inline-block; width: auto; padding: 10px 28px; margin-top: 16px; }
+
+.game {
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 16px;
+}
+.game > * { margin-bottom: 12px; }
+
+.top { display: flex; justify-content: space-between; }
+
+#poster {
+    display: block;
+    width: 100%;
+    border-radius: 6px;
+    transition: filter 0.5s;
+}
+
+#lives, #hint, #result { text-align: center; }
+#hint { font-size: 0.9rem; min-height: 1.3em; }
+#result { font-weight: bold; }
+
+#input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+#history { padding-left: 0; list-style: none; font-size: 0.9rem; color: #4b5563; }
