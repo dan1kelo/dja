@@ -5,43 +5,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title|default:"Jewpro" }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap&subset=cyrillic" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'bibok/css/main.css' %}">
 </head>
 <body>
 <div class="game">
     <div class="top">
-        <a href="{% url 'home' %}">← Назад</a>
-        <span>Побед: <b>{{ score }}</b></span>
+        <a href="{% url 'home' %}">← back</a>
+        <span class="score"> Wins: <b>{{ score }}</b></span>
     </div>
 
     {% if movie %}
-        <img id="poster" src="{{ movie.poster_url }}" alt="Постер" style="filter: blur({{ blur }}px)">
+        <div class="poster-wrap"><img id="poster" src="{{ movie.poster_url }}" alt="Постер" style="filter: blur({{ blur }}px)"></div>
 
-        <div id="lives">{% for l in lives %}{% if l == 'x' %}🔴{% else %}⚪{% endif %} {% endfor %}</div>
+        <div id="lives">{% for l in lives %}{% if l == 'x' %}💔{% else %}❤️{% endif %} {% endfor %}</div>
         <p id="hint">{{ hint }}</p>
 
         {% if status %}
-            <p id="result">
-                {% if status == 'win' %}Верно!{% else %}Не угадал.{% endif %}
+            <p id="result" class="{{ status }}">
+                {% if status == 'win' %} Correct!{% else %} Not guessed.{% endif %}
                 {{ movie.title }} ({{ movie.year }})
             </p>
             <form method="post" action="{% url 'next' %}">
                 {% csrf_token %}
-                <button class="btn">Следующий фильм</button>
+                <button class="btn">Next film →</button>
             </form>
         {% else %}
             <form method="post" action="{% url 'guess' %}">
                 {% csrf_token %}
-                <input id="input" name="title" list="movies" autocomplete="off" placeholder="Название фильма…" required autofocus>
+                <label class="field">
+                    <svg class="field-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                    <input id="input" name="title" list="movies" autocomplete="off" spellcheck="false" placeholder="Введите название фильма…" required autofocus>
+                </label>
                 <datalist id="movies">
                     {% for m in movies %}<option value="{{ m.title }}">{% endfor %}
                 </datalist>
-                <button class="btn">Угадать</button>
+                <button class="btn">Guess</button>
             </form>
         {% endif %}
 
         <ul id="history">
-            {% for h in history %}<li>❌ {{ h }}</li>{% endfor %}
+            {% for h in history %}<li>✕ {{ h }}</li>{% endfor %}
         </ul>
         {% endif %}
 </div>

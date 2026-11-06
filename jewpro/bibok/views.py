@@ -1,29 +1,7 @@
-from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 
-from .models import Movie, Profile
-
-
-def register(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    form = UserCreationForm(request.POST or None)
-    if request.method == 'POST' and form.is_valid():
-        user = form.save()
-        Profile.objects.create(user=user)
-        login(request, user)
-        return redirect('game')
-    return render(request, 'registration/register.html', {'form': form, 'title': 'Регистрация'})
-
-
-def _profile(request):
-    if request.user.is_authenticated:
-        profile, _ = Profile.objects.get_or_create(user=request.user)
-        return profile
-    return None
-
+from .models import Movie
 
 
 def home(request):
@@ -31,6 +9,18 @@ def home(request):
 
 
 def _new_round(request):
+    player = request.session.get('player', [])
+
+    movie = movie = Movie.objects.exclude(id__in=player)     
+    if not movies.exists():
+        player = []
+        movie = Movie.objects.all
+
+    movie  = Movie.order_by('?').first()
+    if movie:
+        request.session['movie_id'] = movie.id
+        request.session['player'] = player
+        
     movie = Movie.objects.order_by('?').first()
     request.session['movie_id'] = movie.id if movie else None
     request.session['tries'] = 0
@@ -47,17 +37,16 @@ def game(request):
         _new_round(request)
         movie = Movie.objects.filter(id=request.session['movie_id']).first()
 
-    profile = _profile(request)
     tries = request.session['tries']
     status = request.session['status']
     hint = ''
     if tries >= 4:
-        hint = f'Год — {movie.year}, жанр — {movie.genre}' if movie else ''
+        hint = f'Age — {movie.year}, genre — {movie.genre}' if movie else ''
     elif tries >= 2:
-        hint = f'Год — {movie.year}' if movie else ''
+        hint = f'Year — {movie.year}' if movie else ''
 
     return render(request, 'game.html', {
-        'title': 'gusse the movie ',
+        'title': 'Guess the movie',
         'movie': movie,
         'movies': Movie.objects.order_by('title'),
         'tries': tries,
@@ -66,7 +55,7 @@ def game(request):
         'blur': max(0, 20 - tries * 4),
         'lives': ['x'] * tries + ['o'] * (5 - tries),
         'history': request.session['history'],
-        'score': profile.wins if profile else request.session.get('score', 0),
+        'score': request.session.get('score', 0),
     })
 
 
@@ -77,21 +66,13 @@ def guess(request):
         answer = request.POST.get('title', '').strip()
         if answer:
             request.session['tries'] += 1
-            profile = _profile(request)
             if answer.casefold() == movie.title.casefold():
                 request.session['status'] = 'win'
                 request.session['score'] = request.session.get('score', 0) + 1
-                if profile:
-                    profile.wins += 1
-                    profile.games += 1
-                    profile.save()
             else:
                 request.session['history'] = request.session['history'] + [answer]
                 if request.session['tries'] >= 5:
                     request.session['status'] = 'lose'
-                    if profile:
-                        profile.games += 1
-                        profile.save()
     return redirect('game')
 
 
