@@ -49,7 +49,7 @@
                     {% csrf_token %}
                     <button class="btn btn-secondary"{% if not can_hint or score < hint_cost %} disabled{% endif %}>Hint (−{{ hint_cost }} pt)</button>
                 </form>
-                <form method="post" action="{% url 'giveup' %}">
+                <form method="post" action="{% url 'restart' %}">
                     {% csrf_token %}
                     <button class="btn btn-secondary">Give up</button>
                 </form>

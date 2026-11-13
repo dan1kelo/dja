@@ -1,3 +1,5 @@
+import random
+
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 
@@ -10,16 +12,16 @@ def home(request):
 
 def _new_round(request):
     player = request.session.get('player', [])
-
-    qs = Movie.objects.exclude(id__in=player)
-    if not qs.exists():
+    all_ids = list(Movie.objects.values_list('id', flat=True))
+    free = [i for i in all_ids if i not in player]
+    if not free:
+        free = [i for i in all_ids if i != (player[-1] if player else None)] or all_ids
         player = []
-        qs = Movie.objects.all()
 
-    movie = qs.order_by('?').first()
-    if movie:
-        player = player + [movie.id]
-    request.session['movie_id'] = movie.id if movie else None
+    movie_id = random.choice(free) if free else None 
+    if movie_id:
+        player = player + [movie_id]
+    request.session['movie_id'] = movie_id
     request.session['player'] = player
     request.session['tries'] = 0
     request.session['history'] = []
@@ -41,7 +43,7 @@ def _mask(title, opened):
             shown += 1 
         else:
             out.append('_')
-        return ''.join(''.join(out).split(' '))
+    return ''.join(out)
 
 
 
@@ -78,6 +80,9 @@ def game(request):
         'lives': ['x'] * tries + ['o'] * (5 - tries),
         'history': request.session['history'],
         'score': request.session.get('score', 0),
+        'hint_cost': HINT_COST,
+        'can_hint': hints < 3,
+        'reward': max(1, WIN_POINTS - HINT_COST * hints),
     })
 
 
@@ -100,7 +105,7 @@ def guess(request):
 
 
 @require_POST
-def next_movie(request):
+def next(request):
     _new_round(request)
     return redirect('game')
 
@@ -114,10 +119,10 @@ def hint(request):
         if hints < 3 and score >= HINT_COST:
             request.session['hints'] = hints + 1 
             request.session['score'] = score - HINT_COST
-        return redirect('game')
+    return redirect('game')
 
 @require_POST
-def give_up(request):
+def restart(request):
     if request.session.get('status') is None and request.session.get('movie_id'):
         request.session['status'] = 'lose'
     return redirect('game')
