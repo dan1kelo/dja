@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b0d1a"/>
+      <stop offset="60%" stop-color="#14112b"/>
+      <stop offset="100%" stop-color="#050509"/>
+    </linearGradient>
+    <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffd27a" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ffd27a" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#e50914" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#e50914" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="sprockets" width="60" height="40" patternUnits="userSpaceOnUse">
+      <rect x="18" y="8" width="24" height="16" rx="4" fill="#0b0d1a"/>
+    </pattern>
+    <filter id="blur"><feGaussianBlur stdDeviation="30"/></filter>
+  </defs>
+
+  <!-- base -->
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+
+  <!-- ambient red glow -->
+  <ellipse cx="960" cy="540" rx="900" ry="600" fill="url(#glow)"/>
+
+  <!-- spotlight beams -->
+  <polygon points="300,0 420,0 760,1080 420,1080" fill="url(#beam)" filter="url(#blur)" opacity="0.8"/>
+  <polygon points="1620,0 1500,0 1160,1080 1500,1080" fill="url(#beam)" filter="url(#blur)" opacity="0.8"/>
+  <polygon points="960,0 1000,0 1080,1080 840,1080" fill="url(#beam)" filter="url(#blur)" opacity="0.5"/>
+
+  <!-- film strips on edges -->
+  <g opacity="0.22">
+    <rect x="0" y="0" width="90" height="1080" fill="#1c1c24"/>
+    <rect x="1830" y="0" width="90" height="1080" fill="#1c1c24"/>
+    <rect x="22" y="0" width="46" height="1080" fill="url(#sprockets)"/>
+    <rect x="1852" y="0" width="46" height="1080" fill="url(#sprockets)"/>
+  </g>
+
+  <!-- film reels -->
+  <g fill="none" stroke="#ffd27a" stroke-width="3" opacity="0.12">
+    <circle cx="1420" cy="260" r="180"/>
+    <circle cx="1420" cy="260" r="40"/>
+    <circle cx="1420" cy="260" r="8"/>
+    <circle cx="1620" cy="760" r="120"/>
+    <circle cx="1620" cy="760" r="26"/>
+  </g>
+  <g fill="#ffd27a" opacity="0.12">
+    <circle cx="1420" cy="140" r="16"/><circle cx="1420" cy="380" r="16"/>
+    <circle cx="1300" cy="260" r="16"/><circle cx="1540" cy="260" r="16"/>
+  </g>
+
+  <!-- faint question marks -->
+  <g font-family="Georgia, serif" font-weight="700" fill="#ffd27a" opacity="0.07">
+    <text x="180" y="300" font-size="260">?</text>
+    <text x="640" y="860" font-size="200">?</text>
+    <text x="1100" y="260" font-size="180">?</text>
+    <text x="1380" y="960" font-size="300">?</text>
+  </g>
+
+  <!-- floor line -->
+  <rect x="0" y="930" width="1920" height="150" fill="#050509" opacity="0.6"/>
+  <line x1="0" y1="930" x2="1920" y2="930" stroke="#e50914" stroke-width="2" opacity="0.4"/>
+</svg>
