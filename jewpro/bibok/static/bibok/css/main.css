@@ -213,3 +213,10 @@ a { color: inherit; }
 }
 .poster-wrap #poster { border-radius: 0; box-shadow: none; transform: scale(1.12); transition: filter 0.8s ease, transform 0.8s ease; }
 #input::-webkit-calendar-picker-indicator { display: none !important; }
+.poster-wrap #poster.revealed { transform: none; }
+
+.actions { display: flex; gap: 10px; margin-top: 10px; }
+.actions form { flex: 1; }
+.btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+.btn-secondary:hover { box-shadow: none; filter: none; color: inherit; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }

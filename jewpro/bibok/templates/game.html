@@ -14,11 +14,11 @@
 <div class="game">
     <div class="top">
         <a href="{% url 'home' %}">← back</a>
-        <span class="score"> Wins: <b>{{ score }}</b></span>
+        <span class="score"> Score: <b>{{ score }}</b></span>
     </div>
 
     {% if movie %}
-        <div class="poster-wrap"><img id="poster" src="{{ movie.poster_url }}" alt="Постер" style="filter: blur({{ blur }}px)"></div>
+        <div class="poster-wrap"><img id="poster"{% if status %} class="revealed"{% endif %} src="{{ movie.poster_url }}" alt="Постер" style="filter: blur({{ blur }}px)"></div>
 
         <div id="lives">{% for l in lives %}{% if l == 'x' %}💔{% else %}❤️{% endif %} {% endfor %}</div>
         <p id="hint">{{ hint }}</p>
@@ -44,6 +44,17 @@
                 </datalist>
                 <button class="btn">Guess</button>
             </form>
+            <div class="actions">
+                <form method="post" action="{% url 'hint' %}">
+                    {% csrf_token %}
+                    <button class="btn btn-secondary"{% if not can_hint or score < hint_cost %} disabled{% endif %}>Hint (−{{ hint_cost }} pt)</button>
+                </form>
+                <form method="post" action="{% url 'giveup' %}">
+                    {% csrf_token %}
+                    <button class="btn btn-secondary">Give up</button>
+                </form>
+            </div>
+            <p id="hint">Reward for a correct guess: {{ reward }} pts</p>
         {% endif %}
 
         <ul id="history">
