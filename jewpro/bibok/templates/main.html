@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title|default:"Jewpro" }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap&subset=cyrillic" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'bibok/css/main.css' %}">
+</head>
+<body>
+    <main class="home">
+        <div class="logo"></div>
+        <h1>Guess the movie</h1>
+        <p>With each mistake, the picture gets clearer.</p>
+        <ul class="rules">
+            <li><span></span>blurred poster</li>
+            <li><span>❤️</span>5 tries</li>
+            <li><span></span>win streak</li>
+        </ul>
+        <a href="{% url 'game' %}" class="btn">Start game</a>
+    </main>
+</body>
+</html>
