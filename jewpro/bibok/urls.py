@@ -9,4 +9,7 @@ urlpatterns = [
     path('game/hint/', views.hint, name='hint'),
     path('game/restart/', views.restart, name='restart'),
     path('game/next/', views.next, name='next'),
+    path('login/', views.login_view, name='login'),
+    path('signup/', views.signup, name='signup'),
+    path('logout/', views.logout_view, name='logout'),
 ]

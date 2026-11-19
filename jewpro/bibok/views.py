@@ -1,5 +1,7 @@
 import random
 
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 
@@ -126,3 +128,25 @@ def restart(request):
     if request.session.get('status') is None and request.session.get('movie_id'):
         request.session['status'] = 'lose'
     return redirect('game')
+
+
+def login_view(request):
+    form = AuthenticationForm(request, data=request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        login(request, form.get_user())
+        return redirect('game')
+    return render(request, 'logo.html', {'title': 'Login', 'form': form})
+
+
+def signup(request):
+    form = UserCreationForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        login(request, form.save())
+        return redirect('game')
+    return render(request, 'signUp.html', {'title': 'Sign up', 'form': form})
+
+
+@require_POST
+def logout_view(request):
+    logout(request)
+    return redirect('home')
