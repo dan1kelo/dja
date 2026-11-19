@@ -1,9 +1,9 @@
 * { box-sizing: border-box; }
 
 :root {
-    --bg: #34461d;
-    --card: rgba(0, 53, 245, 0.78);
-    --border: rgba(255, 255, 255, 0.1);
+    --bg: #42313a;
+    --card: #42313a;
+    --border: #42313a;
     --text: #f1f3f9;
     --muted: #9aa3b8;
     --accent: #f5b700;
@@ -19,7 +19,7 @@ body {
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     background:
-        linear-gradient(rgba(4, 58, 255, 0.82), rgba(16, 59, 211, 0.92)),
+        linear-gradient(#42313a, #6c2d2c),
         var(--bg) url("../../image/guess-movie-bg.svg") center / cover no-repeat fixed;
     min-height: 100vh;
     color: var(--text);
@@ -39,7 +39,7 @@ a { color: inherit; }
     border: 0;
     border-radius: 12px;
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    color: #806639;
+    color: #9f4636;
     font-family: inherit;
     font-size: 1rem;
     font-weight: 800;
