@@ -1,37 +1,26 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title|default:"Sign up" }}</title>
-    <link rel="stylesheet" href="{% static 'bibok/css/logo.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap&subset=cyrillic" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'bibok/css/main.css' %}">
 </head>
 <body>
-    <form class="regist" method="post" action="{% url 'signup' %}">
+    <form class="auth" method="post" action="{% url 'signup' %}">
         {% csrf_token %}
         <h1>Enjoy Super Coolmans</h1>
         {% for field in form %}{% for error in field.errors %}<p class="error">{{ error }}</p>{% endfor %}{% endfor %}
         {% for error in form.non_field_errors %}<p class="error">{{ error }}</p>{% endfor %}
-        <div class="log">
-            <h2>login</h2>
-            <input type="text" name="username" placeholder="user name" value="{{ form.username.value|default:'' }}" required autofocus>
-        </div>
-        <div class="pass">
-            <div class="pass1">
-                <h2>password</h2>
-                <input type="password" name="password1" placeholder="password" required>
-            </div>
-            <div class="pass2">
-                <input type="password" name="password2" placeholder="password confirmation" required>
-            </div>
-        </div>
-        <button type="submit" class="submit">sign up</button>
-        <div class="sign">
-            <a href="{% url 'login' %}">
-                <h3>login</h3>
-            </a>
-        </div>
+        <input type="text" name="username" placeholder="user name" value="{{ form.username.value|default:'' }}" autocomplete="username" required autofocus>
+        <input type="password" name="password1" placeholder="password" autocomplete="new-password" required>
+        <input type="password" name="password2" placeholder="password confirmation" autocomplete="new-password" required>
+        <button type="submit" class="btn">Sign up</button>
+        <a class="switch" href="{% url 'login' %}">Login</a>
     </form>
 </body>
 </html>

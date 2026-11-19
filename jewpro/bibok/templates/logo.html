@@ -1,31 +1,24 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title|default:"Login" }}</title>
-    <link rel="stylesheet" href="{% static 'bibok/css/logo.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap&subset=cyrillic" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'bibok/css/main.css' %}">
 </head>
 <body>
-    <form class="regist" method="post" action="{% url 'login' %}">
+    <form class="auth" method="post" action="{% url 'login' %}">
         {% csrf_token %}
         <h1>Enjoy Super Coolmans</h1>
         {% for error in form.non_field_errors %}<p class="error">{{ error }}</p>{% endfor %}
-        <div class="log">
-            <h2>login</h2>
-            <input type="text" name="username" placeholder="user name" value="{{ form.username.value|default:'' }}" required autofocus>
-        </div>
-        <div class="pass">
-            <h2>password</h2>
-            <input type="password" name="password" placeholder="password" required>
-        </div>
-        <button type="submit" class="submit">login</button>
-        <div class="sign">
-            <a href="{% url 'signup' %}">
-                <h3>sign up</h3>
-            </a>
-        </div>
+        <input type="text" name="username" placeholder="user name" value="{{ form.username.value|default:'' }}" autocomplete="username" required autofocus>
+        <input type="password" name="password" placeholder="password" autocomplete="current-password" required>
+        <button type="submit" class="btn">Login</button>
+        <a class="switch" href="{% url 'signup' %}">Sign up</a>
     </form>
 </body>
 </html>
