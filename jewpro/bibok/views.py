@@ -1,6 +1,7 @@
 import random
 
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
@@ -8,6 +9,7 @@ from django.views.decorators.http import require_POST
 from .models import Movie
 
 
+@login_required
 def home(request):
     return render(request, 'main.html', {'title': 'Jewpro'})
 
@@ -49,6 +51,7 @@ def _mask(title, opened):
 
 
 
+@login_required
 def game(request):
     if 'movie_id' not in request.session:
         _new_round(request)
@@ -134,7 +137,7 @@ def login_view(request):
     form = AuthenticationForm(request, data=request.POST or None)
     if request.method == 'POST' and form.is_valid():
         login(request, form.get_user())
-        return redirect('game')
+        return redirect('home')
     return render(request, 'logo.html', {'title': 'Login', 'form': form})
 
 
@@ -142,7 +145,7 @@ def signup(request):
     form = UserCreationForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         login(request, form.save())
-        return redirect('game')
+        return redirect('home')
     return render(request, 'signUp.html', {'title': 'Sign up', 'form': form})
 
 
