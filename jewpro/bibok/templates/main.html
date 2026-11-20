@@ -10,12 +10,6 @@
 <body>
     <main class="home">
         <h1>Guess the movie</h1>
-        <p>With each mistake, the picture gets clearer.</p>
-        <ul class="rules">
-            <li>blurred poster</li>
-            <li>5 tries</li>
-            <li>hints for points</li>
-        </ul>
         <a href="{% url 'game' %}" class="btn">Start game</a>
         <form method="post" action="{% url 'logout' %}" class="logout">
             {% csrf_token %}

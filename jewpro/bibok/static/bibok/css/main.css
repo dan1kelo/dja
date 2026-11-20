@@ -61,13 +61,6 @@ a {
     width: auto;
     padding: 10px 30px;
 }
-.rules {
-    list-style: none;
-    padding: 0;
-}
-.rules li {
-    margin-bottom: 5px;
-}
 
 /* гра */
 .game {
