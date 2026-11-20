@@ -5,9 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title|default:"Jewpro" }}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap&subset=cyrillic" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'bibok/css/main.css' %}">
 </head>
 <body>
@@ -22,12 +19,12 @@
         <img id="poster"{% if status %} class="revealed"{% endif %} src="{{ movie.poster_url }}" alt="Movie poster" style="filter: blur({{ blur }}px)">
     </div>
 
-    <div id="lives">{% for l in lives %}{% if l == 'x' %}💔{% else %}❤️{% endif %} {% endfor %}</div>
+    <p id="lives">Tries: {{ tries }} / 5</p>
     <p id="hint">{{ hint }}</p>
 
     {% if status %}
         <p id="result" class="{{ status }}">
-            {% if status == 'win' %}Correct!{% else %}Not guessed.{% endif %}
+            {% if status == 'win' %}Correct.{% else %}Not guessed.{% endif %}
             It was "{{ movie.title }}" ({{ movie.year }})
         </p>
         <form method="post" action="{% url 'next' %}">
@@ -37,10 +34,7 @@
     {% else %}
         <form method="post" action="{% url 'guess' %}">
             {% csrf_token %}
-            <label class="field">
-                <svg class="field-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-                <input id="input" name="title" list="movies" autocomplete="off" spellcheck="false" placeholder="Movie title" required autofocus>
-            </label>
+            <input id="input" name="title" list="movies" autocomplete="off" placeholder="Movie title" required autofocus>
             <datalist id="movies">
                 {% for m in movies %}<option value="{{ m.title }}">{% endfor %}
             </datalist>
@@ -61,7 +55,7 @@
     {% endif %}
 
     <ul id="history">
-        {% for h in history %}<li>✕ {{ h }}</li>{% endfor %}
+        {% for h in history %}<li>{{ h }}</li>{% endfor %}
     </ul>
     {% endif %}
 </div>
