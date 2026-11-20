@@ -10,13 +10,13 @@
 <body>
 <div class="game">
     <div class="top">
-        <a href="{% url 'home' %}">← Back</a>
+        <a href="{% url 'home' %}">Back</a>
         <span class="score">Score: <b>{{ score }}</b></span>
     </div>
 
     {% if movie %}
     <div class="poster-wrap">
-        <img id="poster"{% if status %} class="revealed"{% endif %} src="{{ movie.poster_url }}" alt="Movie poster" style="filter: blur({{ blur }}px)">
+        <img id="poster" class="blur-{{ blur }}" src="{{ movie.poster_url }}" alt="Movie poster">
     </div>
 
     <p id="lives">Tries: {{ tries }} / 5</p>
