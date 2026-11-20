@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 
@@ -19,3 +20,14 @@ class Movie(models.Model):
     @property
     def poster_url(self):
         return f'https://image.tmdb.org/t/p/w500/{self.poster}'
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
+    score = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['-score', 'user_id']
+
+    def __str__(self):
+        return f'{self.user.username}: {self.score}'

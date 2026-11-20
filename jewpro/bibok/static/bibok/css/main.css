@@ -221,3 +221,41 @@ a { color: inherit; }
     .home { padding: 28px 18px; }
     .home h1 { font-size: 1.6rem; }
 }
+
+/* ---------- игра + таблица лидеров ---------- */
+.layout {
+    width: 100%;
+    max-width: 760px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+.layout .game { flex: 1 1 440px; max-width: 440px; }
+
+.leaders {
+    flex: 0 0 240px;
+    padding: 18px;
+    background: var(--card);
+    border: 3px solid var(--accent);
+    border-radius: 18px;
+}
+.leaders h2 { margin: 0 0 12px; font-size: 1.1rem; }
+.leaders ol { margin: 0; padding: 0; list-style: none; counter-reset: place; }
+.leaders li {
+    counter-increment: place;
+    display: flex;
+    gap: 8px;
+    padding: 6px 4px;
+    border-bottom: 1px solid var(--accent);
+}
+.leaders li:last-child { border-bottom: 0; }
+.leaders li::before { content: counter(place) "."; width: 1.6em; color: var(--muted); }
+.leaders .name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.leaders li.me { color: var(--ok); }
+.leaders li.empty::before { content: none; }
+
+@media (max-width: 720px) {
+    .layout { flex-direction: column; align-items: stretch; }
+    .layout .game { max-width: none; }
+    .leaders { flex-basis: auto; }
+}

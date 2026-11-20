@@ -6,7 +6,19 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 
-from .models import Movie
+from .models import Movie, Profile
+
+LEADERS_COUNT = 10
+
+
+def _profile(user):
+    return Profile.objects.get_or_create(user=user)[0]
+
+
+def _add_score(user, delta):
+    profile = _profile(user)
+    profile.score = max(0, profile.score + delta)
+    profile.save(update_fields=['score'])
 
 
 @login_required
@@ -74,7 +86,9 @@ def game(request):
         hint = (hint + ' | ' if hint else '') + f'Title: {_mask(movie.title, hints)}'
 
 
+    leaders = Profile.objects.select_related('user').order_by('-score', 'user_id')[:LEADERS_COUNT]
     return render(request, 'game.html', {
+        'leaders': leaders,
         'title': 'Guess the movie',
         'movie': movie,
         'movies': Movie.objects.order_by('title'),
@@ -84,13 +98,14 @@ def game(request):
         'blur': 0 if status else max(0, 20 - tries * 4),
         'lives': ['x'] * tries + ['o'] * (5 - tries),
         'history': request.session['history'],
-        'score': request.session.get('score', 0),
+        'score': _profile(request.user).score,
         'hint_cost': HINT_COST,
         'can_hint': hints < 3,
         'reward': max(1, WIN_POINTS - HINT_COST * hints),
     })
 
 
+@login_required
 @require_POST
 def guess(request):
     if request.session.get('status') is None and request.session.get('movie_id'):
@@ -100,8 +115,8 @@ def guess(request):
             request.session['tries'] += 1
             if answer.casefold() == movie.title.casefold():
                 request.session['status'] = 'win'
-                request.session['score'] = request.session.get('score', 0) + max(
-                    1, WIN_POINTS - HINT_COST * request.session.get('hints', 0))
+                _add_score(request.user, max(
+                    1, WIN_POINTS - HINT_COST * request.session.get('hints', 0)))
             else:
                 request.session['history'] = request.session['history'] + [answer]
                 if request.session['tries'] >= 5:
@@ -113,17 +128,17 @@ def guess(request):
 def next(request):
     _new_round(request)
     return redirect('game')
+ё
 
 
-
+@login_required
 @require_POST
 def hint(request):
     if request.session.get('status') is None and request.session.get('movie_id'):
         hints = request.session.get('hints', 0)
-        score = request.session.get('score', 0)
-        if hints < 3 and score >= HINT_COST:
-            request.session['hints'] = hints + 1 
-            request.session['score'] = score - HINT_COST
+        if hints < 3 and _profile(request.user).score >= HINT_COST:
+            request.session['hints'] = hints + 1
+            _add_score(request.user, -HINT_COST)
     return redirect('game')
 
 @require_POST

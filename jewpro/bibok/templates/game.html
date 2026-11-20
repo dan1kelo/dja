@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{% static 'bibok/css/main.css' %}">
 </head>
 <body>
+<div class="layout">
 <div class="game">
     <div class="top">
         <a href="{% url 'home' %}">← Back</a>
@@ -64,6 +65,21 @@
         {% for h in history %}<li>✕ {{ h }}</li>{% endfor %}
     </ul>
     {% endif %}
+</div>
+
+<aside class="leaders">
+    <h2>Leaderboard</h2>
+    <ol>
+        {% for p in leaders %}
+        <li{% if p.user_id == request.user.id %} class="me"{% endif %}>
+            <span class="name">{{ p.user.username }}</span>
+            <b>{{ p.score }}</b>
+        </li>
+        {% empty %}
+        <li class="empty">No players yet</li>
+        {% endfor %}
+    </ol>
+</aside>
 </div>
 </body>
 </html>
