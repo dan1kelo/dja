@@ -14,6 +14,13 @@ class MovieAdmin(admin.ModelAdmin):
 class ProfileInline(admin.StackedInline):
     model = Profile
     can_delete = False
+    fields = ('score', 'games_played', 'wins', 'current_streak')
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'score', 'games_played', 'wins', 'current_streak')
+    search_fields = ('user__username',)
+    list_select_related = ('user',)
 
 
 admin.site.unregister(User)

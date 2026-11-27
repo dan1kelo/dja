@@ -21,6 +21,7 @@
             <li><span></span>win streak</li>
         </ul>
         <a href="{% url 'game' %}" class="btn">Start game</a>
+        <a href="{% url 'profile' %}" class="btn btn-secondary">Profile</a>
         <form method="post" action="{% url 'logout' %}" class="logout">
             {% csrf_token %}
             <button class="link">Logout{% if user.is_authenticated %} ({{ user.username }}){% endif %}</button>

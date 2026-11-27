@@ -21,6 +21,10 @@ def _add_score(user, delta):
     profile.save(update_fields=['score'])
 
 
+def _record_result(user, won):
+    _profile(user).record_result(won)
+
+
 @login_required
 def home(request):
     return render(request, 'main.html', {'title': 'Jewpro'})
@@ -115,12 +119,14 @@ def guess(request):
             request.session['tries'] += 1
             if answer.casefold() == movie.title.casefold():
                 request.session['status'] = 'win'
+                _record_result(request.user, True)
                 _add_score(request.user, max(
                     1, WIN_POINTS - HINT_COST * request.session.get('hints', 0)))
             else:
                 request.session['history'] = request.session['history'] + [answer]
                 if request.session['tries'] >= 5:
                     request.session['status'] = 'lose'
+                    _record_result(request.user, False)
     return redirect('game')
 
 
@@ -128,7 +134,6 @@ def guess(request):
 def next(request):
     _new_round(request)
     return redirect('game')
-ё
 
 
 @login_required
@@ -141,11 +146,21 @@ def hint(request):
             _add_score(request.user, -HINT_COST)
     return redirect('game')
 
+@login_required
 @require_POST
 def restart(request):
     if request.session.get('status') is None and request.session.get('movie_id'):
         request.session['status'] = 'lose'
+        _record_result(request.user, False)
     return redirect('game')
+
+
+@login_required
+def profile(request):
+    return render(request, 'profile.html', {
+        'title': 'Profile',
+        'profile': _profile(request.user),
+    })
 
 
 def login_view(request):

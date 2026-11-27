@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title|default:"Jewpro" }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap&subset=cyrillic" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'bibok/css/main.css' %}">
+</head>
+<body>
+<div class="game profile">
+    <div class="top">
+        <a href="{% url 'home' %}">← Back</a>
+        <span class="score">Score: <b>{{ profile.score }}</b></span>
+    </div>
+
+    <h1>{{ user.username }}</h1>
+
+    <ul class="stats">
+        <li><b>{{ profile.games_played }}</b><span>Games played</span></li>
+        <li><b>{{ profile.wins }}</b><span>Wins</span></li>
+        <li><b>{{ profile.losses }}</b><span>Losses</span></li>
+        <li><b>{{ profile.win_rate }}%</b><span>Win rate</span></li>
+        <li><b>{{ profile.current_streak }}</b><span>Current streak</span></li>
+    </ul>
+
+    <a href="{% url 'game' %}" class="btn">Play</a>
+</div>
+</body>
+</html>
